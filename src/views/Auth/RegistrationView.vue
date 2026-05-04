@@ -7,7 +7,7 @@
             <v-toolbar-title>Registration</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form v-model="valid" ref="form" validation>
+            <v-form v-model="valid" ref="form" lazy-validation>
               <v-text-field
                 prepend-icon="mdi-account"
                 name="email"
@@ -15,8 +15,7 @@
                 type="email"
                 v-model="email"
                 :rules="emailRules"
-              >
-              </v-text-field>
+              />
               <v-text-field
                 prepend-icon="mdi-lock"
                 name="password"
@@ -24,7 +23,7 @@
                 type="password"
                 v-model="password"
                 :rules="passwordRules"
-              ></v-text-field>
+              />
               <v-text-field
                 prepend-icon="mdi-lock"
                 name="confirm-password"
@@ -32,7 +31,7 @@
                 type="password"
                 v-model="confirmPassword"
                 :rules="confirmPasswordRules"
-              ></v-text-field>
+              />
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -53,6 +52,7 @@
 
 <script>
 export default {
+  name: 'RegistrationView',
   data() {
     return {
       email: "",
@@ -65,11 +65,11 @@ export default {
       ],
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be more or equal than 6 characters'
+        v => (v && v.length >= 6) || 'Password must be at least 6 characters'
       ],
       confirmPasswordRules: [
-        v => !!v || 'Password is required',
-        v => v === this.password || 'Password should match'
+        v => !!v || 'Please confirm your password',
+        v => v === this.password || 'Passwords must match'
       ]
     }
   },
@@ -80,7 +80,8 @@ export default {
           email: this.email,
           password: this.password
         }
-        console.log(user)
+        this.$store.dispatch('registerUser', user)
+        console.log('User registered:', user)
       }
     }
   }
