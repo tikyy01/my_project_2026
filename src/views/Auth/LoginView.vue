@@ -7,7 +7,7 @@
             <v-toolbar-title>Login</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form v-model="valid" ref="form" validation>
+            <v-form v-model="valid" ref="form" lazy-validation>
               <v-text-field
                 prepend-icon="mdi-account"
                 name="email"
@@ -15,8 +15,7 @@
                 type="email"
                 v-model="email"
                 :rules="emailRules"
-              >
-              </v-text-field>
+              />
               <v-text-field
                 prepend-icon="mdi-lock"
                 name="password"
@@ -24,7 +23,7 @@
                 type="password"
                 v-model="password"
                 :rules="passwordRules"
-              ></v-text-field>
+              />
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -32,7 +31,8 @@
             <v-btn
               color="primary"
               @click="onSubmit"
-              :disabled="!valid"
+              :loading="loading"
+              :disabled="!valid || loading"
             >
               Login
             </v-btn>
@@ -45,6 +45,7 @@
 
 <script>
 export default {
+  name: 'LoginView',
   data() {
     return {
       email: "",
@@ -56,8 +57,13 @@ export default {
       ],
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be more or equal than 6 characters'
+        v => (v && v.length >= 6) || 'Password must be at least 6 characters'
       ]
+    }
+  },
+  computed: {
+    loading() {
+      return this.$store.getters.loading
     }
   },
   methods: {
@@ -67,7 +73,13 @@ export default {
           email: this.email,
           password: this.password
         }
-        console.log(user)
+        this.$store.dispatch('loginUser', user)
+          .then(() => {
+            this.$router.push("/")
+          })
+          .catch((err) => {
+            console.log(err.message)
+          })
       }
     }
   }

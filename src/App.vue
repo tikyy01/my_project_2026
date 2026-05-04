@@ -3,8 +3,12 @@
     <v-navigation-drawer app v-model="drawer">
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title">КИПУ</v-list-item-title>
-          <v-list-item-subtitle>Учебный проект</v-list-item-subtitle>
+          <v-list-item-title class="title">
+            КИПУ
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            Учебный проект
+          </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
@@ -43,6 +47,24 @@
     <v-main>
       <router-view />
     </v-main>
+
+    <!-- Снекбар для отображения ошибок -->
+    <v-snackbar
+      v-model="snackbar"
+      multi-line
+      :timeout="2000"
+      color="error"
+    >
+      {{ error }}
+      <template v-slot:actions>
+        <v-btn
+          variant="text"
+          @click="closeError"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -58,6 +80,24 @@ export default {
         { title: "New ad", icon: "mdi-note-plus-outline", url: "/new" },
         { title: "My ads", icon: "mdi-view-list-outline", url: "/list" }
       ]
+    }
+  },
+  computed: {
+    error() {
+      return this.$store.getters.error
+    },
+    snackbar: {
+      get() {
+        return !!this.error
+      },
+      set() {
+        this.closeError()
+      }
+    }
+  },
+  methods: {
+    closeError() {
+      this.$store.dispatch('clearError')
     }
   }
 }
