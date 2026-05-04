@@ -3,18 +3,14 @@
     <v-row>
       <v-col cols="8" offset="2">
         <h1 class="text--secondary mb-3 mt-3">Create Ad</h1>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="8" offset="2">
+        
         <v-form v-model="valid" ref="form" lazy-validation>
           <v-text-field
             name="title"
             label="Ad Title"
             type="text"
             v-model="title"
-            :rules="[(v) => !!v || 'Title is required']"
+            :rules="[v => !!v || 'Title is required']"
           >
           </v-text-field>
           
@@ -23,56 +19,54 @@
             label="Ad Description"
             type="text"
             v-model="description"
-            :rules="[(v) => !!v || 'Description is required']"
+            :rules="[v => !!v || 'Description is required']"
             class="mb-3"
           ></v-textarea>
         </v-form>
-      </v-col>
-    </v-row>
 
-    <!-- Блок 1: Кнопка загрузки картинки -->
-    <v-row>
-      <v-col cols="8" offset="2">
-        <v-btn class="mt-3" color="warning">
-          Upload
-          <v-icon right dark>mdi-cloud-upload</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
+        <!-- Кнопка загрузки -->
+        <v-row>
+          <v-col cols="12">
+            <v-btn class="mt-3" color="warning">
+              Upload
+              <v-icon right dark>mdi-cloud-upload</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
 
-    <!-- Блок 2: Превью картинки -->
-    <v-row>
-      <v-col cols="8" offset="2">
-        <img
-          src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
-          height="150"
-          class="mt-3"
-        />
-      </v-col>
-    </v-row>
+        <!-- Превью картинки -->
+        <v-row>
+          <v-col cols="12">
+            <img 
+              src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg" 
+              height="150" 
+              class="mt-3"
+            >
+          </v-col>
+        </v-row>
 
-    <!-- Блок 3: Переключатель Promo -->
-    <v-row>
-      <v-col cols="8" offset="2">
-        <v-switch 
-          v-model="promo" 
-          label="Ad to Promo?"
-        ></v-switch>
-      </v-col>
-    </v-row>
+        <!-- Переключатель Promo -->
+        <v-row>
+          <v-col cols="12">
+            <v-switch
+              v-model="promo"
+              label="Ad to Promo?"
+            ></v-switch>
+          </v-col>
+        </v-row>
 
-    <!-- Блок 4: Кнопка создания объявления -->
-    <v-row>
-      <v-col cols="8" offset="2">
-        <v-spacer></v-spacer>
-        <v-btn
-          color="success"
-          @click="createAd"
-          :loading="loading"
-          :disabled="!valid || loading"
-        >
-          Create Ad
-        </v-btn>
+        <!-- Кнопка создания -->
+        <v-row>
+          <v-col cols="12">
+            <v-spacer></v-spacer>
+            <v-btn 
+              color="success"
+              @click="createAd"
+            >
+              Create Ad
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -86,8 +80,7 @@ export default {
       valid: false,
       title: "",
       description: "",
-      promo: true,
-      loading: false
+      promo: false
     }
   },
   methods: {
@@ -96,9 +89,19 @@ export default {
         const ad = {
           title: this.title,
           desc: this.description,
-          promo: this.promo
+          promo: this.promo,
+          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png"
         }
-        console.log(ad)
+        this.$store.dispatch("createAd", ad)
+        
+        // Очистка формы после создания
+        this.title = ""
+        this.description = ""
+        this.promo = false
+        this.$refs.form.reset()
+        
+        // Переход на главную страницу
+        this.$router.push('/')
       }
     }
   }
