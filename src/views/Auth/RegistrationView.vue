@@ -33,13 +33,25 @@
                 :rules="confirmPasswordRules"
               />
             </v-form>
+            
+            <!-- Сообщение об ошибке -->
+            <v-alert
+              v-if="error"
+              type="error"
+              dense
+              dismissible
+              class="mt-3"
+            >
+              {{ error }}
+            </v-alert>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
               color="primary"
               @click="onSubmit"
-              :disabled="!valid"
+              :loading="loading"
+              :disabled="!valid || loading"
             >
               Create Account
             </v-btn>
@@ -73,6 +85,14 @@ export default {
       ]
     }
   },
+  computed: {
+    loading() {
+      return this.$store.getters.loading
+    },
+    error() {
+      return this.$store.getters.error
+    }
+  },
   methods: {
     onSubmit() {
       if (this.$refs.form.validate()) {
@@ -81,7 +101,12 @@ export default {
           password: this.password
         }
         this.$store.dispatch('registerUser', user)
-        console.log('User registered:', user)
+          .then(() => {
+            this.$router.push("/")
+          })
+          .catch((err) => {
+            console.log(err.message)
+          })
       }
     }
   }
