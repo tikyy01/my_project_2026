@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Карусель (Carousel) -->
+    <!-- Карусель -->
     <v-container fluid>
       <v-row>
         <v-col cols="12">
@@ -11,7 +11,7 @@
               :src="ad.src"
             >
               <div class="ad-link">
-                <v-btn class="error" :to="'/ad/' + ad.id">
+                <v-btn color="error" :to="'/ad/' + ad.id">
                   {{ ad.title }}
                 </v-btn>
               </div>
@@ -21,7 +21,7 @@
       </v-row>
     </v-container>
 
-    <!-- Сетка с карточками товаров (Grid) -->
+    <!-- Сетка карточек -->
     <v-container>
       <v-row>
         <v-col
@@ -35,10 +35,11 @@
             <v-img
               :src="ad.src"
               height="200px"
+              cover
             ></v-img>
-            <v-card-title primary-title>
+            <v-card-title>
               <div>
-                <h3 class="headline mb-0">{{ ad.title }}</h3>
+                <h3>{{ ad.title }}</h3>
                 <div>{{ ad.desc }}</div>
               </div>
             </v-card-title>
