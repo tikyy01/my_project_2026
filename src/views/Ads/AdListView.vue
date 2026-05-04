@@ -43,38 +43,9 @@
 <script>
 export default {
   name: 'AdListView',
-  data() {
-    return {
-      ads: [
-        {
-          title: "First",
-          desc: "First Desc. This is a longer description to test how the text overflow and ellipsis works in the card component. It should be truncated after 85 pixels.",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-          id: "1"
-        },
-        {
-          title: "Second",
-          desc: "Second Desc",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-          id: "2"
-        },
-        {
-          title: "Third",
-          desc: "Third Desc",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-          id: "3"
-        },
-        {
-          title: "Fourth",
-          desc: "Fourth Desc",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-          id: "4"
-        }
-      ]
+  computed: {
+    ads() {
+      return this.$store.getters.myAds
     }
   }
 }

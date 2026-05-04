@@ -62,6 +62,8 @@
             <v-btn 
               color="success"
               @click="createAd"
+              :loading="loading"
+              :disabled="!valid || loading"
             >
               Create Ad
             </v-btn>
@@ -83,6 +85,11 @@ export default {
       promo: false
     }
   },
+  computed: {
+    loading() {
+      return this.$store.getters.loading
+    }
+  },
   methods: {
     createAd() {
       if (this.$refs.form.validate()) {
@@ -93,15 +100,12 @@ export default {
           src: "https://cdn.vuetifyjs.com/images/cards/cooking.png"
         }
         this.$store.dispatch("createAd", ad)
-        
-        // Очистка формы после создания
-        this.title = ""
-        this.description = ""
-        this.promo = false
-        this.$refs.form.reset()
-        
-        // Переход на главную страницу
-        this.$router.push('/')
+          .then(() => {
+            this.$router.push("/list")
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       }
     }
   }
