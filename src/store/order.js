@@ -1,3 +1,14 @@
+class Order {
+  constructor(name, phone, adId, userId, done = false, id = null) {
+    this.name = name
+    this.phone = phone
+    this.adId = adId
+    this.userId = userId
+    this.done = done
+    this.id = id
+  }
+}
+
 export default {
   state: {
     orders: []
@@ -9,11 +20,7 @@ export default {
   },
   actions: {
     async createOrder({ commit }, { name, phone, adId, userId }) {
-      console.log(name)
-      console.log(phone)
-      console.log(adId)
-      console.log(userId)
-      
+      let payload = new Order(name, phone, adId, userId, false, Math.random())
       commit('clearError', null, { root: true })
       
       // Имитация запроса к серверу
@@ -24,15 +31,7 @@ export default {
       
       if (isRequestOk) {
         await promise.then(() => {
-          // Здесь вызовем commit для добавления заказа
-          commit('createOrder', {
-            id: Math.random(),
-            name,
-            phone,
-            adId,
-            userId,
-            done: false
-          })
+          commit('createOrder', payload)
         })
       } else {
         await promise.then(() => {
@@ -43,8 +42,9 @@ export default {
     }
   },
   getters: {
-    orders(state) {
-      return state.orders
+    orders(state, getters) {
+      if (getters.user == null) return []
+      return state.orders.filter(order => order.userId == getters.user.id)
     }
   }
 }
