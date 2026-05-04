@@ -3,12 +3,8 @@
     <v-navigation-drawer app v-model="drawer">
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title">
-            КИПУ
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            Учебный проект
-          </v-list-item-subtitle>
+          <v-list-item-title class="title">КИПУ</v-list-item-title>
+          <v-list-item-subtitle>Учебный проект</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
@@ -28,6 +24,9 @@
 
     <v-app-bar app dark color="primary">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>
+        <v-btn to="/">Home</v-btn>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn
@@ -35,17 +34,14 @@
           :key="link.title"
           :to="link.url"
         >
-          <v-icon
-            start
-            :icon="link.icon"
-          ></v-icon>
+          <v-icon start :icon="link.icon"></v-icon>
           {{ link.title }}
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>
 
     <v-main>
-      <router-view></router-view>
+      <router-view />
     </v-main>
   </v-app>
 </template>
